@@ -1,0 +1,15 @@
+﻿# chap03_DataIO (연습문제)
+
+
+# <연습문제> info.df 데이터 프레임을 infoprocess.csv 파일로 
+#            저장한 후 데이터프레임으로 가져오시오.
+
+# <조건1> "C:/Rwork/output" 디렉토리에 "infoprocess.csv"로 저장
+   # 힌트) write.csv()함수 이용
+
+# <조건2> "infoprocess.csv" 파일을 infoData 데이터 프레임으로 가져와서 결과 확인
+
+# <조건3>  infoData 데이트 셋 구조 보기 함수를 이용하여 관측치와 컬럼수 확인
+
+# <조건4> 1980년과 1990년을 제외한 나머지 컬럼 대상으로 상위 6개 관측치 보기
+
