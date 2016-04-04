@@ -211,9 +211,13 @@ print(z*200) # 변수 또는 수식만 가능
 
 # 2-2. 파일에 데이터 저장
 
+Sys.setenv(JAVA_HOME='C:/Program Files/Java/jre1.8.0_77')
+
 # 1) sink() 함수를 이용 파일 저장
 setwd("C:/Rwork/output") 
 sink("savework.txt") # 저장할 파일명
+
+
 
 # studentexcel.xlsx 파일 선택
 studentx <- read.xlsx(file.choose(), sheetIndex=1, encoding="UTF-8") 
@@ -249,6 +253,41 @@ write.csv(st.df,"stdf.csv", row.names=F, quote=F) # 행 이름 제거
 # --------------------------------------------------------
 # <데이터 입출력 연습문제>
 # --------------------------------------------------------     
+
+# chap03_DataIO (연습문제)
+
+
+# <연습문제> info.df 데이터 프레임을 infoprocess.csv 파일로 
+#            저장한 후 데이터프레임으로 가져오시오.
+
+
+#### 사전준비 내용
+
+library(XML) # <table> <tr> <td> 등의 테그를 인식하는 라이브러리 
+info.url <- "http://www.infoplease.com/ipa/A0104652.html"
+info.df<-readHTMLTable(info.url, header=T, which=1, stringsAsFactors=F)
+names(info.df) <- c("State",1980,1990,1995,2000,2003,2006,2009,2012)
+head(info.df) 
+
+
+# <조건1> "C:/Rwork/output" 디렉토리에 "infoprocess.csv"로 저장
+# 힌트) write.csv()함수 이용
+setwd("C:/Rwork/output")
+write.csv(info.df,"infoprocess.csv") # 행 이름 제거
+
+
+# <조건2> "infoprocess.csv" 파일을 infoData 데이터 프레임으로 가져와서 결과 확인
+infoData <- read.csv('infoprocess.csv')
+infoData
+
+# <조건3>  infoData 데이트 셋 구조 보기 함수를 이용하여 관측치와 컬럼수 확인
+head(infoData[-c(3,4)],6)
+head(infoData)
+tail(infoData)
+class(infoData)
+
+# <조건4> 1980년과 1990년을 제외한 나머지 컬럼 대상으로 상위 6개 관측치 보기
+head(infoData[-c(3,4)],6)
 
 
 
