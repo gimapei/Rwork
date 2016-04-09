@@ -84,6 +84,8 @@ table(gender) # 빈도수
 pie(table(gender)) # 파이 차트
 
 # gender 변수 정제(1,2)
+# 변수 <- subset(데이타, 조건)
+
 data <- subset(dataset,dataset$gender==1 | dataset$gender==2)
 data # gender변수 데이터 정제
 length(data$gender) # 297개 - 3개 정제됨
@@ -109,10 +111,16 @@ stem(data$price) # 줄기와 잎 도표보기
 # -------------------------------------------------------------
 
 #4. 역코딩 - 긍정순서(5~1)
+# 1-매우만족, 2-만곡, 3-보통, 4-불만족, 5-매우불만족
+# 1~5 를 Sum해서 점수화하면 만족척도가 낮은 점수로 비춰진다. 
+# 따라서 1이면 높은 점수로 판단되도록 해야한다. 이것을 역코딩이라고 한다. 
+
 data$survey
 survey <- data$survey
+head(survey)
+
 csurvey <- 6-survey # 역코딩
-csurvey
+head(csurvey)
 survey  # 역코딩 결과와 비교
 data$survey <- csurvey # survery 수정
 head(data) # survey 결과 확인
@@ -120,4 +128,62 @@ head(data) # survey 결과 확인
 # -------------------------------------------------------------
 # <실습문제3> 직급순서(1급 -> 5급, 5급 -> 1급)으로 역코딩 하시오.
 # -------------------------------------------------------------
+
+
+
+# 5. 코딩변경 - 나이 기준 변수 리코딩
+# 어떤때 사용하나 
+# 연속형 변수 --> 범주화 하고 싶을때
+summary(data$age)
+
+data$age2[data$age <= 30] <-"청년층"
+data$age2[data$age > 30 & data$age <=45] <-"중년층"
+data$age2[data$age > 45] <-"장년층"
+
+head(data[c('age','age2')])
+
+# 6.파생변수 생성 - 기존 데이터로 새로운 변수 생성
+data$resident2[data$resident == 1] <-"특별시"
+data$resident2[data$resident >=2 & data$resident <=4] <-"광역시"
+data$resident2[data$resident == 5] <-"시구군"
+head(data) # data 테이블 전체 - age2 컬럼 생성
+head(data[c("resident","resident2")]) # 2개만 지정
+
+# -------------------------------------------------------------
+# <데이터 전처리 관련 연습문제>
+# -------------------------------------------------------------
+
+
+# 7.정제된 데이터 및 표본 셈플링
+getwd()
+setwd("c:/Rwork/Part-II")
+
+# (1) 정제된 데이터 저장
+write.csv(data,"cleanData.csv", quote=F, row.names=F) 
+
+# (2) 저장된 파일 불러오기/확인
+data <- read.csv("cleanData.csv", header=TRUE)
+data 
+length(data$age) # 길이 확인
+
+# (3) 표본 셈플링
+choice <- sample(1:nrow(data),30) # 30개 무작위 추출
+choice # 추출값 : 행 번호
+choice2 <- sample(nrow(data), 30) #sample과 동일
+choice2
+choice3 <- sample(50:nrow(data), 30) # 50~end
+choice3
+choice4 <- sample(c(50:100), 30) # 50~100
+choice4
+
+#다양한 범위를 지정해서 무작위 셈플링
+choice5 <- sample(c(10:50, 70:150, 160:190),30)
+choice5
+
+# 마지막 행수 직접 입력
+choicePrice <- sample(1:234,30) 
+choicePrice # 셈플링 결과 
+
+
+# 특정 변수 대상 셈플링 불가
 
