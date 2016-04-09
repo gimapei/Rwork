@@ -1,0 +1,77 @@
+﻿#chap08_Formal_InFormal 수업내용
+# - 정형 데이터와 비정형데이터 처리
+
+
+#1. 정형 데이터 처리 - Oracle DB 데이터 처리
+# DB(RDB) 연결 - ODBC, JDBC, DBI
+# - Oracle/MySql 실습
+
+
+# 패키지 설치
+# - RJDBC 패키지를 사용하기 위해서는 우선 java를 설치해야 한다.
+install.packages("rJava")
+install.packages("DBI")
+install.packages("RJDBC")
+
+# 패키지 로딩
+library(DBI)
+Sys.setenv(JAVA_HOME='C:\\Program Files\\Java\\jre1.8.0_60')
+library(rJava)
+library(RJDBC) # rJava에 의존적이다.(rJava 먼저 로딩)
+
+#1) Oracle 설치(DB :orcl, id : scott, pass : tiger)
+#2) table 생성/레코드 추가  
+#create table test(
+# id varchar(20) primary key,
+# pass varchar(20) not null,
+# name varchar(20) not null,
+# age number(2)
+#);
+
+#insert into test values('hong','1234','홍길동',35);
+#insert into test values('lee','1234','이순신',45);
+
+# 3) Oracle 연동   
+
+############ Oracle 10g ##############
+# driver  
+drv<-JDBC("oracle.jdbc.driver.OracleDriver", 
+          "C:\\oraclexe\\app\\oracle\\product\\10.2.0\\server\\jdbc\\lib\\ojdbc14.jar")
+# db연동(driver, url,uid,upwd)   
+conn<-dbConnect(drv, "jdbc:oracle:thin:@//127.0.0.1:1521/xe","scott","tiger")
+######################################
+
+############ Oracle 11g #################
+# driver  
+drv<-JDBC("oracle.jdbc.driver.OracleDriver", 
+          "C:\\app\\jinsung\\product\\11.2.0\\dbhome_1\\jdbc\\lib\\ojdbc6.jar")
+# db연동(driver, url,uid,upwd)   
+conn<-dbConnect(drv, "jdbc:oracle:thin:@//127.0.0.1:1521/orcl","scott","tiger")
+######################################
+
+
+########### 포트번호와 DB명 확인 ##########
+1. Oracle10g
+    C:\oraclexe\app\oracle\product\10.2.0\server\NETWORK\ADMIN
+    폴더에서 listener.ora와 TNSNAMES.ora 파일에서 확인 및 추가 
+  ※ XE : 서버명, HOST : 호스트명, 1521 : 포트 번호
+ 
+
+2. Oracle11g :  데이터베이스 연동에 필요한 PORT와 SID  보기   
+   1) PORT
+     C:\app\choongang\product\11.2.0\dbhome_1\NETWORK\ADMIN
+     에서 listener.ora 파일 내용에서 (PORT=1521)
+   2) SID
+     C:\app\choongang\product\11.2.0\dbhome_1\NETWORK\ADMIN
+     에서 tnsnames.ora 파일 내용에서 SERVICE-NAME=orcl
+#########################################################
+
+
+# select문 작성과 실행
+query = "SELECT * FROM test"
+dbGetQuery(conn, query)
+
+
+
+
+

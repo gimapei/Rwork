@@ -1,0 +1,89 @@
+﻿# 2. 주요 R 내장 함수 
+
+seq(-2, 2, by=.2) # 0.2씩 증가
+seq(length=10, from=-5, by=.2) # -5부터 10개 생성 
+rnorm(20, mean = 0, sd = 1) # 정규분포를 따르는 20개 데이터 생성
+runif(20, min=0, max=100) # 0~100사이의 20개 난수 생성
+sample(0:100, 20) # 0~100사이의 20개 sample 생성
+vec<-1:10
+min(vec)
+max(vec)
+range(vec)
+mean(vec) # 평균
+median(vec) # 중위수
+sum(vec) 
+prod(vec) # 데이터의 곱(1x2x3... x10)
+
+factorial(5) # 팩토리얼=120
+abs(-5)  # 절대값
+sd(rnorm(10)) # 표준편차 구하기 
+table(vec) # 빈도수 
+sqrt(16) # 4 
+4^2 # 16
+# 나머지 구하기
+5%%3 # 2
+6%%2 # 0
+
+
+getwd()
+setwd("c:/Rwork/Part-I")
+excel <- read.csv("excel.csv", header=TRUE)
+head(excel,10) 
+
+#colMeans()함수 : 각 열의 평균 계산
+colMeans(excel[1:5]) # [1:5] : 칼럼 의미, excel[, 1:5]과 동일한 의미
+
+summary(excel)  
+
+
+#########################
+# 난수 생성과 확률 분포           #
+#########################
+
+n <- 1000 # 시행 횟수 
+
+# 1. 정규분포(연속형)의 난수 발생
+# 형식) rnorm(n, mean=, sd=) # 평균과 표준편차 이용
+rnorm(n, mean=0, sd=1) # 1000개 정규분포를 따르는 난수 생성 
+hist(rnorm(n, mean=0, sd=1))# 표준정규분포-히스토그램  
+# [해설] 평균=0과 표준편차=1로 고정시킨 표준정규분포를 따르는 난수 발생
+# 히스토그램 : 평균을 중심으로 좌우 균등한 종모양의 이상적인 분포
+
+
+# 2. 균등분포(연속형)의 난수 발생 
+# 형식) runif(n, min = , max=) 
+runif(n, min=0, max=10) # 0 < n < 10 # 균등분포- 연속형
+hist(runif(n, min=0, max=10)) 
+# [해설] 0 < n < 10 사이의 범위에서 난수를 발생한다. 
+# 히스토그램 : 계급에 따라서 빈도가 균등한 분포 
+
+
+# 3. 이항분포(이산형) 난수 발생
+# - 정규분포와 같은 이상적인 분포형태로 이산변량을 갖는다. 
+# 형식) rbinom(n, size, prob = ) # random binomial distribution 
+n <- 10 # 독립시행 횟수 - 독립적으로 n회 반복 
+rbinom(n, 1, prob = 1/2) # 0 또는 1의 이산변량 10개를 0.5확률로 선정
+# [1] 1 0 0 1 0 0 0 0 1 0
+rbinom(n, 2, 0.5) # 0, 1, 2의 이산변량 10개를 0.5확률로 선정
+# [1] 0 1 0 0 1 0 1 2 1 0
+
+# [문제] 주사위를 1000번 던져서 나오는 각 눈금수 구하시오.
+# <조건1> runif(n, min=, max) 함수 이용 
+# <조건2> table()함수 이용 - 빈도수 구하기 
+# <조건3> 빈도수를 히스토그램으로 그리기 
+
+n <- 1000 # 시행 횟수
+runif(n, min=0, max=5) # 0.000001 ~ 4.999999
+
+# 반올림(정수형 변환) 
+result <- round(runif(n, min=0, max=5)) # 1 ~ 5
+result
+
+table(result) # 빈도수 구하기 
+#  0   1   2   3   4   5 
+#110 182 206 204 192 106
+
+# 차트 그리기(이산변수는 막대차트가 효과적임)
+hist(result)
+barplot(table(result)) 
+

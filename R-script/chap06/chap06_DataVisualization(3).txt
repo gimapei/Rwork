@@ -1,0 +1,89 @@
+﻿
+# 매출 추이 산점도 
+sales <- read.csv("C:/Rwork/Part-II/sales.csv", header=TRUE) 
+
+par(mfrow=c(1,1))
+
+attach(sales) # sales 데이터 셋 이름 생략
+plot(Quarter, A, type="o", pch=18, col="blue", ylim=c(0, 2500), axes=T,ann=T)
+
+# axes=F : x축/y축 눈금 제거, ann=F : x축/y축 이름 제거
+plot(Quarter, A, type="o", pch=18, col="blue", ylim=c(0, 2500), axes=F,ann=F)
+
+# X축 범위와 이름 추가
+axis(1, at=1:4, lab=c("1분기", "2분기", "3분기", "4분기")) 
+# y축 범위 추가
+axis(2, ylim=c(0, 2500))  
+text(3.7, 2300, "사업부A", cex=0.8) # 텍스트 추가
+
+# 제목 추가
+title(main="사업부 2015년 분기별 매출추이 비교", col.main="red", font.main=4) 
+title(xlab="분기", col.lab="blue") 
+title(ylab="매출액", col.lab="blue") 
+
+par(new=T) # 그래프 추가
+plot(Quarter, B, type="o", pch=15, col="red", ylim=c(0, 2500), axes=F, ann=F) 
+text(3.7, 1600, "사업부B")
+
+par(new=T) 
+plot(Quarter, C, type="o", pch=17, col="green", ylim=c(0, 2500), axes=F, ann=F) 
+text(3.7, 1100, "사업부C", cex=0.8)
+
+par(new=T) 
+plot(Quarter, D, type="o", pch=21, col="purple", ylim=c(0, 2500), axes=F, ann=F) 
+text(3.7, 700, "사업부D", cex=0.8)
+
+par(new=T) 
+plot(Quarter, E, type="o", pch=25, col="orange", ylim=c(0, 2500), axes=F, ann=F) 
+text(3.7, 400, "사업부E", cex=0.8)
+detach(sales) # attach 해제
+
+
+# x변수와 y변수의 회귀관계(galton 데이터 셋)
+par(mfrow=c(1,1))
+plot(child~parent, data=galton) # y ~ x
+
+out = lm(child~parent, data=galton)
+abline(out, col="red") 
+
+
+# 동일데이터가 겹친 경우 시각화 표현
+
+# (1) 데이터프레임으로 변환
+freqData <- as.data.frame(table(galton$child, galton$parent))
+
+names(freqData)=c("child","parent", "freq") # 컬럼명 지정
+
+# (2) 프레임 -> 벡터 -> 수치데이터변환 -> 가중치 적용
+parent <- as.numeric(as.vector(freqData$parent))
+child <- as.numeric(as.vector(freqData$child))
+plot(child~parent, pch=21, col="blue", bg="green",
+     cex=0.15*freqData$freq, xlab="parent", ylab="child")
+
+
+# 4) 변수 간의 비교 시각화
+data(iris)
+
+# 4개 변수 상호비교
+pairs(iris[,1:4]) # Sepal.Length Sepal.Width Petal.Length Petal.Width
+
+# Species=="virginica"인 경우만 4개 변수 상호비교
+iris[iris$Species=="virginica", 1:4]
+
+pairs(iris[iris$Species=="virginica", 1:4])
+pairs(iris[iris$Species=="setosa", 1:4])
+
+# 차트 결과 파일로 저장
+setwd("C:/Rwork/Part-II") # 폴더 지정
+jpeg("galton.jpg", width=720, height=480) # 픽셀 지정 가능
+
+plot(child~parent, data=galton) # y ~ x
+title(main="부모와 자식의 키 유전관계")
+out = lm(child~parent, data=galton)
+abline(out, col="red") 
+dev.off() # 장치 종료 
+
+
+# ------------------------------------------------------------------- 
+# <데이터 시각화 관련 연습문제> 
+# ------------------------------------------------------------------- 
