@@ -111,6 +111,30 @@ num <- as.numeric(test)
 num <- num * 2
 num
 
+
+# 주식관련 데이터 가져오기
+# 1) 파일가져오기
+finviz <- read.csv(file.choose())
+dim(finviz)
+str(finviz)
+# 7 ~ 68컬럼 : num - 특수문자
+
+
+# 2) 특수문자 제거 함수 정의
+clean_num <- function(str)
+{
+  str <- str_replace_all(str, "% | \\$ | , | \\) | \\(", "")
+  result = as.numeric(str)
+}
+
+# 3) type(factor, num) 단위로 컬럼 추출
+fac_col <- finviz[, 2:6] # csv파일의 2 ~ 6번째 컬럼만 Factor 형태임
+num_col <- finviz[, 7:10] # csv파일의 7 ~ 10번째가 Number 형태임
+
+# 4) 숫자 컬럼에 특수문자 제거 적용 num_col에 적용한다는 말임
+rnum_col <- apply(num_col, 2, clean_num)
+rnum_col
+
 # ------------------------------------------------------------------- 
 #<연습문제1> 
 # ------------------------------------------------------------------- 
@@ -119,4 +143,63 @@ num
 # ------------------------------------------------------------------- 
 #<연습문제2> 
 # ------------------------------------------------------------------- 
+
+
+
+# 2. 주요 R 내장 함수 
+
+seq(-2, 2, by=.2) # 0.2씩 증가
+seq(length=10, from=-5, by=.2) # -5부터 10개 생성 
+rnorm(20, mean = 0, sd = 1) # 정규분포를 따르는 20개 데이터 생성
+runif(20, min=0, max=100) # 0~100사이의 20개 난수 생성
+sample(0:100, 20) # 0~100사이의 20개 sample 생성
+vec<-1:10
+min(vec)
+max(vec)
+range(vec)
+mean(vec) # 평균
+median(vec) # 중위수
+sum(vec) 
+prod(vec) # 데이터의 곱
+
+factorial(5) # 팩토리얼=120
+abs(-5)  # 절대값
+sd(rnorm(10)) # 표준편차 구하기 
+table(vec) # 빈도수 
+sqrt(16) # 4 
+4^2 # 16
+# 나머지 구하기
+5%%3 # 2
+6%%2 # 0
+
+
+getwd()
+setwd("c:/Rwork/Part-I")
+excel <- read.csv("excel.csv", header=TRUE)
+head(excel,10) 
+
+#colMeans()함수 : 각 열의 평균 계산
+colMeans(excel[1:5])
+
+summary(excel)  
+
+
+# 난수 발생 함수
+n <- 1000 # 시행횟수
+
+# 1. 정규분포 난수 생성(연속형:소숫점 포된 실수형)
+mm <- rnorm(n, mean = 0, sd = 1)
+hist(mm)
+
+# 2. 균등분포 난수(연속형) 생성
+dd <- runif(n, min=0, max=10000)
+hist(dd)
+
+# 3. 이항분포 난수(이산형) 생성
+n <- 10
+rbinom(n, 5, prob=0.5)
+
+# 4. sample 여러개의 데이타에서 Random하게 추출
+sample(1:200, 20)
+
 
