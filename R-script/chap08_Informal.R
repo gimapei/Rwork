@@ -24,9 +24,11 @@ library(rJava) # 로딩
 install.packages(c("KoNLP", "tm", "wordcloud"))
 
 # 4) 패키지 로딩
-library(KoNLP) 
-library(tm)
-library(wordcloud) 
+library(KoNLP)      # 한글 단어 처리 rjava 영향
+library(tm)         # 텍스트 마이닝(전처리용)
+library(wordcloud)  # 단어 구름 생성  
+
+extractNoun("나는 대한민국 국민이다. 국민은 ")
 
 
 ##################################################
@@ -44,6 +46,7 @@ str(facebook_data) # chr [1:76]
 # 2. Corpus : 텍스트 데이터 -> 자료집(documents) 생성(tm 패키지 제공)
 facebook_corpus <- Corpus(VectorSource(facebook_data)) 
 facebook_corpus 
+head(facebook_corpus)
 # 76개 자료집 보기 - 포함된 문자 수 제공
 inspect(facebook_corpus)  
 
@@ -98,7 +101,9 @@ wordResult[1:10]
 #      21       20       19       16       15  
 
 # 9. wordcloud 생성 (디자인 적용전)
+wordcloud(c("한국","일본"), c(10,5))
 myName <- names(wordResult) # 단어 이름 생성 -> 빈도수의 이름 
+
 wordcloud(myName, wordResult) # 단어구름 적용
 
 
@@ -157,3 +162,104 @@ names(topWord)
 lab <- paste(names(topWord), "\n", pct, "%")
 # (5) 파이차트에 단어와 백분율을 레이블로 적용 
 pie(topWord, main="SNS 빅데이터 관련 토픽분석", col=rainbow(10), cex=0.8, labels=lab)
+
+
+
+# abstractClean.txt ( 논문요약 내용 : 400개)
+gul <- file("C:/Rwork/Part-II/abstractClean.txt", encoding="UTF-8")
+gul_data <- readLines(gul) # 줄 단위 데이터 생성
+head(gul_data) # 앞부분 6줄 보기 - 줄 단위 문장 확인 
+str(gul_data) # chr [1:76]
+
+# 2. Corpus : 텍스트 데이터 -> 자료집(documents) 생성(tm 패키지 제공)
+gul_corpus <- Corpus(VectorSource(gul_data)) 
+gul_corpus 
+head(gul_corpus)
+# 76개 자료집 보기 - 포함된 문자 수 제공
+inspect(gul_corpus)  
+
+# 3. 분석 대상 자료집을 대상으로 NA 처리(공백)
+gul_corpus[is.na(gul_corpus)]   <- " "
+gul_corpus 
+
+# 4. 세종 사전 사용 및 단어 추가
+useSejongDic() # 세종 사전 불러오기
+
+exNouns <- function(x) { 
+  paste(extractNoun(as.character(x)), collapse=" ")
+}
+# (2) exNouns 함수 이용 단어 추출 
+# 형식) sapply(적용 데이터, 적용함수) 
+gul_nouns <- sapply(gul_corpus, exNouns) 
+# (3) 단어 추출 결과
+#class(facebook_nouns) # [1] "character" -> Vector 타입
+gul_nouns[1] # 단어만 추출된 첫 줄 보기 
+
+# 6. 데이터 전처리   
+# (1) 추출된 단어 이용하여 자료집 생성
+myCorputgul <- Corpus(VectorSource(gul_nouns)) 
+# (2) 데이터 전처리 
+myCorputgul <- tm_map(myCorputgul, removePunctuation) # 문장부호 제거
+myCorputgul <- tm_map(myCorputgul, removeNumbers) # 수치 제거
+myCorputgul <- tm_map(myCorputgul, tolower) # 소문자 변경
+myCorputgul <-tm_map(myCorputgul, removeWords, stopwords('english')) # 불용어제거
+
+myStopwords = c(stopwords('english'), "연구", "제품");
+myCorputgul = tm_map(myCorputgul, removeWords, myStopwords);
+
+
+
+# (3) 전처리 결과 확인 
+inspect(myCorputgul[1:5]) # 데이터 전처리 결과 확인
+
+# 7. 단어 선별(단어 길이 2개 이상)
+# (1) 자료집 -> 일반문서 변경
+myCorputgul_txt <- tm_map(myCorputgul, PlainTextDocument) 
+# (2) TermDocumentMatrix() : 단어 선별(단어길이 2개 이상인 단어 선별 -> matrix 변경)
+myCorputgul_txt <- TermDocumentMatrix(myCorputgul_txt, control=list(wordLengths=c(2,Inf)))
+myCorputgul_txt
+# (3) matrix -> data.frame 변경(빈도분석을 위해서)
+myTermgul.df <- as.data.frame(as.matrix(myCorputgul_txt)) 
+dim(myTermgul.df) # [1] 876  76
+
+# 8. 단어 빈도수 구하기(행 단위 합계 -> 내림차순 정렬)
+wordResult <- sort(rowSums(myTermgul.df), decreasing=TRUE) # 빈도수로 내림차순 정렬
+wordResult[1:10]
+#빅데이터     사용     분석     처리     수집 
+#      21       20       19       16       15  
+
+# 9. wordcloud 생성 (디자인 적용전)
+myName <- names(wordResult) # 단어 이름 생성 -> 빈도수의 이름 
+
+wordcloud(myName, wordResult) # 단어구름 적용
+
+# 10. 단어구름에 디자인 적용(빈도수, 색상, 랜덤, 회전 등)
+# (1) 단어이름과 빈도수로 data.frame 생성
+word.df <- data.frame(word=myName, freq=wordResult) 
+str(word.df) # word, freq 변수
+
+# (2) 단어 색상과 글꼴 지정
+pal <- brewer.pal(12,"Paired") # 12가지 색상 pal <- brewer.pal(9,"Set1") # Set1~ Set3
+# 폰트 설정세팅 : "맑은 고딕", "서울남산체 B"
+windowsFonts(malgun=windowsFont("맑은 고딕"))  #windows
+
+# (3) 단어 구름 시각화 - 별도의 창에 색상, 빈도수, 글꼴, 회전 등의 속성을 적용하여 
+x11( ) # 별도의 창을 띄우는 함수
+wordcloud(word.df$word, word.df$freq, 
+          scale=c(5,1), min.freq=3, random.order=F, 
+          rot.per=.1, colors=pal, family="malgun")
+#wordcloud(단어, 빈도수, 5:1비율 크기,최소빈도수,랜덤순서,랜덤색상, 회전비율, 색상(파렛트),컬러,글꼴 )
+
+# 11. 차트 시각화 
+#(1) 상위 10개 토픽추출
+topWord <- head(sort(wordResult, decreasing=T), 10) # 상위 10개 토픽추출 
+# (2) 파일 차트 생성 
+pie(topWord, col=rainbow(10), radius=1) # 파이 차트-무지개색, 원크기
+# (3) 빈도수 백분율 적용 
+pct <- round(topWord/sum(topWord)*100, 1) # 백분율
+names(topWord)
+# (4) 단어와 백분율 하나로 합친다.
+lab <- paste(names(topWord), "\n", pct, "%")
+# (5) 파이차트에 단어와 백분율을 레이블로 적용 
+pie(topWord, main="SNS 빅데이터 관련 토픽분석", col=rainbow(10), cex=0.8, labels=lab)
+
