@@ -190,6 +190,32 @@ abline(out, col="red")
 
 
 # 동일데이터가 겹친 경우 시각화 표현
+# (1) x, y 벡터 생성
+x <- c(1,2,3,4,2,4)
+y <- rep(2,6)
+x; y
+
+# (2) 교차 테이블 생성
+tb <- table(x,y)
+tb
+# 데이타 해석
+#     y
+# x   2
+# 1   1  x=1 and y=2 는 1개
+# 2   2  x=2 and y=2 는 2개
+# 3   1  x=3 and y=2 는 1개
+# 4   2  x=4 and y=2 는 2개
+
+# (3) x, y 산점도
+plot(x,y)
+
+# (4) 동일 데이타 시각화
+xy.df <- as.data.frame(tb)
+xy.df
+
+
+plot(x,y, pch="O", col="blue", cex=0.5*xy.df$Freq, main="x y 중첩데이타 시각화")
+
 
 # (1) 데이터프레임으로 변환
 freqData <- as.data.frame(table(galton$child, galton$parent))
