@@ -1,0 +1,61 @@
+﻿# 2. latticeExtra
+# 격자 형태의 그래플 제공, 다차원 데이터를 격자형으로 동시에 표현
+
+install.packages("latticeExtra")
+library(latticeExtra)
+data(SeatacWeather) # latticeExtra 데이터
+SeatacWeather
+str(SeatacWeather)
+
+# --------------------------------------------------------------------------
+# <연습문제2> lattice 패키지 관련 
+# --------------------------------------------------------------------------
+
+# 주요 함수 
+1. doubleYScale() : double y축 생성 그래프
+
+# (1) y축:강수량(precip) ~ x축:일(day) | 조건:월(month) , 직선 그래프(type="h")
+rain <- xyplot(precip ~ day | month, data=SeatacWeather, type="h")
+print(rain) # 월별 강수량 직선 그래프
+
+# (2) y축(최저기온+최고기온)~x축:일(day) | 조건월(month), 선그래프(type="l")
+temp <- xyplot(min.temp + max.temp ~ day | month,
+data=SeatacWeather, type="l", layout=c(3,1)) # type=line
+print(temp)
+
+# (3) 기온(2)과 강수량(1) 그래프 통합-doubleYScale(latticeExtra 제공)
+doubleYScale(temp, rain,  style1=0, style2=3, add.ylab2=T, 
+text=c("min", "max", "rain"), columns=3)
+
+# 왼쪽 y축 style(style1=0), 오른쪽 y축 style(style2=3), 
+# layout : temp 기준
+# 왼쪽 y축이름(min.temp + max.temp)
+# add.ylab2=T : 오른쪽 Y축이름(precip), text : 범례 추가
+
+# 직전 그래프에 색상 추가 
+update(trellis.last.object(), 
+par.settings=simpleTheme(col=c("green","red","blue")))
+
+
+# 2. ecdfplot() : 누적분포함수 결과 그래프 생성
+# New York Choral Society 합창단 성악가의 목소리 영역과 키 관계
+  
+data(singer, package = "lattice") 
+head(singer)
+str(singer) # 'data.frame': 235 obs. of  2 variables
+names(singer)
+# height voice.part
+range(singer$height) # [1] 60 76
+attributes(singer$voice.part) #변수의 속성보기
+
+# Bass 2 서브셋 작성
+data <- subset(singer, singer$voice.part=='Bass 2')
+str(data) # [1] 26  2 -> Bass 2 관측치 26개
+range(data$height) # [1] 66 75 -> Bass 2 키 범위
+table(data$height) # Bass 2 키 빈도수
+7/26 # [1] 0.2692308 
+
+ecdfplot(~height | voice.part, data = singer)
+# factor형 변수(voice.part)를 조건으로 height변수에 CDF 적용 누적분포함수 
+# Empirical CDF : 
+#  누적분포함수(Cumulative Distribution Functions)의 조건을 격자구조로 나타낸다.
