@@ -395,6 +395,8 @@ data$pass2[data$pass== 2] <-"불합격"
 type2_ <- table(data$type2)
 barplot(type2_)
 
+pass2_ <- table(data$pass2)
+pie(pass2_)
 
 # [조건 2] 비율척도 변수인 나이 변수에 대해 요약치(평균, 표준편차)와 
 # 비대칭도(왜도와 첨도)통계량을 구하고, 히스토그램 작성하여 비대칭도 통계량을 설명하시오.
