@@ -247,6 +247,56 @@ freq(data$gender) # 빈도수, 결측치(NA), 비율
 # <기술통계량 분석 관련 연습문제>
 # --------------------------------------------------------------------------
 
+# <연습문제1> MASS 패키지에 있는 Animals 데이터 셋을 이용하여 각 단계에 맞게 기술통계량을 구하시오.
+
+# [단계 1] MASS 패키지 설치 및 메모리 로딩
+install.packages("MASS")
+library(MASS) # MASS 패키지 불러오기
+data(Animals) # Animals 데이터셋 로딩
+head(Animals) # Animals 데이터셋 보기
+
+# [단계 2] R의 기본함수를 이용하여 brain 칼럼을 대상으로 다음 기술통계량 구하기
+# Animals 데이터 셋 차원보기 
+m <- Animals
+dim(m)
+
+# 요약통계량 
+summary(m)
+attach(m)
+summary(brain)
+
+# 평균
+mean(brain)
+mean(body)
+
+# 중위수
+median(brain)
+median(body)
+
+# 표준편차
+sd(brain)
+sd(body)
+
+# 분산
+var(body)
+var(brain)
+
+# 최댓값
+max(body)
+max(brain)
+
+# 최솟값
+min(body)
+min(brain)
+
+# [단계 3] 패키지에서 제공되는 describe()과 freq()함수를 이용하여 
+# Animals 데이터 셋 전체를 대상으로 기술통계량 구하기
+describe(m)
+freq(m)
+
+
+
+
 #  3. 기술통계량 보고서 작성법
 
 # 1) 거주지역 
