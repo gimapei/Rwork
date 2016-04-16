@@ -304,6 +304,8 @@ data$resident2[data$resident == 1] <-"특별시"
 data$resident2[data$resident >=2 & data$resident <=4] <-"광역시"
 data$resident2[data$resident == 5] <-"시구군"
 
+head(data[c("resident", "resident2")],10)
+
 x<- table(data$resident2)
 prop.table(x) # 비율 계산 
 y <-  prop.table(x)
@@ -374,3 +376,34 @@ write.csv(data,"cleanDescriptive.csv", quote=F, row.names=F) # 행 이름 제거
 # --------------------------------------------------------------------------
 
 
+# <연습문제2> descriptive.csv 데이터 셋을 대상으로 
+# 다음 조건에 맞게 빈도분석 및 기술통계량 분석을 수행하시오.
+setwd("c:/Rwork/Part-III")
+data <- read.csv("descriptive.csv", header=TRUE)
+
+head(data)
+str(data)
+
+
+# [조건 1] 명목척도 변수인 학교유형(type), 합격여부(pass) 변수에 대해 
+# 빈도분석을 수행하고 결과를 막대그래프나 파이차트로 그리시오.
+data$type2[data$type== 1] <-"국립"
+data$type2[data$type== 2] <-"사립"
+data$pass2[data$pass== 1] <-"합격"
+data$pass2[data$pass== 2] <-"불합격"
+
+type2_ <- table(data$type2)
+barplot(type2_)
+
+
+# [조건 2] 비율척도 변수인 나이 변수에 대해 요약치(평균, 표준편차)와 
+# 비대칭도(왜도와 첨도)통계량을 구하고, 히스토그램 작성하여 비대칭도 통계량을 설명하시오.
+age <- data$age
+range(age)
+mean(age)
+ad(age)
+
+library(moments)
+skewness(age)
+kurtosis(age)
+hist(age)
