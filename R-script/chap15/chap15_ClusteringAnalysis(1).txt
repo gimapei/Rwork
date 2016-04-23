@@ -1,0 +1,65 @@
+###################################################
+# 군집분석(Clustering)
+###################################################
+
+# 1. 유클리드 거리
+# 유클리드 거리(Euclidean distance)는 두 점 사이의 거리 계산
+
+# (1) matrix 생성
+x <- matrix(1:9, nrow=3, by=T) 
+x
+
+# (2) matrix 대상 유클리드 거리 생성 함수
+# 형식) dist(x, method="euclidean") -> x : numeric matrix, data frame
+dist <- dist(x, method="euclidean") # method 생략가능
+dist
+
+# (3) 유클리드 거리 계산 식
+# 관측대상 p와 q의 대응하는 변량값의 차의 제곱의 합에 sqrt 적용
+
+
+# 2. 계층적 군집분석(Hierarchical Clustering)
+# - 거리가 가장 가까운 대상부터 결합하여 나무모양의 
+#   계층구조를 상향식(Bottom-up)으로 만들어가면서 군집을 형성 
+
+# (1) 군집분석(Clustering)분석을 위한 패키지 설치
+install.packages("cluster") # hclust() : 계층적 클러스터 함수 제공
+library(cluster) # 일반적으로 3~10개 그룹핑이 적정
+
+# (2) 데이터 셋 생성
+x <- matrix(1:9, nrow=3, by=T) 
+x
+
+# (3) matrix 대상 유클리드 거리 생성 함수
+dist <- dist(x, method="euclidean") # method 생략가능
+dist
+
+# (4) 유클리드 거리 matrix를 이용한 클러스터링
+hc <- hclust(dist) # 클러스터링 적용
+hc
+
+plot(hc) # 클러스터 시각화(Dendrogram) -> 1과2 군집(클러스터) 형성
+
+#<실습> 중1학년 신체검사 결과 군집분석
+#-------------------------------------
+body <- read.csv("c:/Rwork/Part-Iv/bodycheck.csv", header=TRUE)
+
+idist<- dist(body[, -1]) # 유클리드 거리 생성
+
+hc <- hclust(idist) # 클러스터링
+hc
+
+plot(hc, hang=-1) # 음수값 제외 클러스터링 시각화
+
+# 3개 그룹 선정, 선 색 지정
+rect.hclust(hc, k=3, border="red") # 3개 그룹 선정, 선 색 지정
+
+# 각 그룹별 서브셋 만들기
+g1<- subset(body, 번호==10| 번호==4| 번호==8| 번호==1 | 번호==15)
+g2<- subset(body, 번호==11| 번호==3| 번호==5| 번호==6 | 번호==14)
+g3<- subset(body, 번호==2| 번호==9| 번호==13| 번호==7 | 번호==12)
+
+#--------------------------------------------------------------------
+# <연습문제1> 계층적 군집분석
+#--------------------------------------------------------------------
+

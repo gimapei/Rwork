@@ -1,0 +1,42 @@
+######################################################
+# 회귀분석(Regression Analysis)
+######################################################
+
+#1. 상관관계 분석(Correlation Analysis)
+# 변수 간 관련성 분석 방법
+
+result <- read.csv("C:/Rwork/Part-IV/product.csv", header=TRUE)
+head(result) # 친밀도 적절성 만족도(등간척도 - 5점 척도)
+
+# 기술통계량
+summary(result) # 요약통계량
+# 표준편차  
+sd(result$친밀도);sd(result$적절성);sd(result$만족도)
+
+# 상관계수 보기
+# 형식) cor(x,y, method) # x변수, y변수, method(pearson): 방법
+
+cor(result$친밀도, result$적절성) # 0.4992086 -> 다소 높은 양의 상관관계
+# ±0.9 ~ ±0.7: 관련성 높음, 적어도 ±6이상, 논문(±0.4)이상
+cor(result$친밀도, result$만족도) # 0.467145 -> 다소 높은 양의 상관관계
+
+
+# 전체 변수 간 상관계수 보기
+cor(result, method="pearson") # 피어슨 상관계수 - default
+
+# 방향성 있는 색생으로 표현 - 동일 색상으로 그룹화 표시 및 색의 농도 
+install.packages("corrgram")   
+library(corrgram)
+corrgram(result) # 색상 적용 - 동일 색상으로 그룹화 표시
+corrgram(result, upper.panel=panel.conf) # 수치(상관계수) 추가(위쪽)
+corrgram(result, lower.panel=panel.conf) # 수치(상관계수) 추가(아래쪽)
+
+
+# 차트에 곡선과 별표 추가
+install.packages("PerformanceAnalytics") 
+library(PerformanceAnalytics) 
+# 상관성,p값(*),정규분포 시각화 - 모수 검정 조건 
+chart.Correlation(result, histogram=, pch="+") 
+
+# spearman : 서열척도 대상 상관계수
+cor(result, method="spearman")

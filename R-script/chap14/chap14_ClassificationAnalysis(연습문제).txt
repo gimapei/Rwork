@@ -1,0 +1,48 @@
+#<연습문제1>  classfication.csv 파일을 읽어서 total, price, period, variety 변수를
+#    x변수로 response 변수를 y변수로 하여 의사결정 트리를 생성하시오.
+
+# 변수설명  
+# total : 총구매금액, price : 1회평균구매금액, period : 쇼핑시간, variety : 구매다양성
+
+# 1) 데이터 가져오기(header 없음) 
+result <- read.csv("C:/Rwork/Part-IV/classification.csv", header=FALSE) 
+
+# 2) 테이블 모양 변경 패키지 설치
+install.packages("reshape") 
+library(reshape)
+
+# 3) 변수명 지정
+result <- rename(result, c(V1="total", V2="price", V3="period", V4="variety", V5="response")) 
+View(result)
+
+#4) sample()함수 이용 학습데이터와 검정데이터 7:3 비율로 셈플링
+
+#5) formula 생성 : 종속변수 ~ 독립변수 
+
+#6) 분류모델 생성 : ctree() 함수 이용 
+
+#7) 의사결정 트리 시각화 및 해석
+
+#8) 검정 데이터 적용 : predict ()와 table()함수 이용
+#--------------------------------------------------------------------
+
+# <연습문제2> weather 데이터 셋을 7:3으로 나누어 weather_train, weather_test로 
+# 저장한 후 weather_train으로 분류모델을 생성하고, weather_test로 예측하시오. 
+# 비가 올 확률이 50% 이상이면 'Rain', 50% 미만이면 'No Rain'으로 빈도수를 
+# 출력하시오.
+
+# 조건) y변수 : RainTomorrow, x변수 : Date와 RainToday변수를 제외한 나머지 변수
+# 힌트) 분류모델에 대한 예측은 predict()함수 이용
+
+# (1) 데이터 가져오기
+weather = read.csv("c:/Rwork/Part-IV/weather.csv", header=TRUE) 
+
+# (2) 데이터 셈플링
+
+# (3) 분류모델 생성
+
+# (4) 분류모델 예측 : 검정데이터로 예측
+
+# (5) 비올 확률 빈도수 출력 
+
+#--------------------------------------------------------------------
