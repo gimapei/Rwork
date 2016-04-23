@@ -338,3 +338,7 @@ names(result)
 
 # aov()의 결과값은 summary()함수를 사용해야 p-value 확인 
 summary(result) 
+
+TukeyHSD(result)
+
+plot(TukeyHSD(result))
