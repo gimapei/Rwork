@@ -16,7 +16,7 @@
 
 # 2) rJava 설치 : R에서 java 사용을 위한 패키지
 install.packages("rJava")
-Sys.setenv(JAVA_HOME='C:\\Program Files\\Java\\jre1.8.0_77')
+Sys.setenv(JAVA_HOME='C:\\Program Files\\Java\\jdk1.8.0_91')
 library(rJava) # 로딩
 
 # 3) install.packages
@@ -37,7 +37,7 @@ extractNoun("안녕하세요. 저는 홍길동 입니다.")
 
 
 # 1. 텍스트 데이터(facebook_bigdata.txt) 가져오기
-facebook <- file("C:/Rwork/Part-II/facebook_bigdata.txt", encoding="UTF-8")
+facebook <- file("C:/github/Rwork/Part-II/facebook_bigdata.txt", encoding="UTF-8")
 facebook_data <- readLines(facebook) # 줄 단위 데이터 생성
 head(facebook_data) # 앞부분 6줄 보기 - 줄 단위 문장 확인 
 str(facebook_data) # chr [1:76]

@@ -120,12 +120,15 @@ install.packages("XML")
 library(XML) # <table> <tr> <td> <th>
 
 # 미국의 각 주별 1인당 소득자료
+# http://score.sports.media.daum.net/record/baseball/kbo/trnk.daum
 info.url <- "http://www.infoplease.com/ipa/A0104652.html"
+info.url <- "http://score.sports.media.daum.net/record/baseball/kbo/trnk.daum"
 
 # readHTMLTable() 함수 역할 - <table>,<tr>,<td> 태그 이용
-info.df<-readHTMLTable(info.url, header=T, which=1, stringsAsFactors=F)
+info.df<-readHTMLTable(info.url, header=T, which=1, stringsAsFactors=T)
 # header=T : 컬럼명 있음, which=1 : 첫번째, stringsAsFactors 문자는 범주(값의 목록)처리 안함
 info.df
+head(info.df,5)
 
 # 레코드 수 변경 확인 <- update
 info.df<-info.df[1:53,] # NA 레코드 제거(54행 제거)
@@ -136,8 +139,10 @@ info.df<-info.df[c(-2,-28),] # $가 있는 행 제거
 # 컬럼명 변경
 info.df<-info.df[c(-1,-2),] # 1,2행 제거
 
+head(info.df,5)
+
 # 컬럼명 추가
-names(info.df) <- c("State",1980,1990,1995,2000,2003,2006,2009,2012)
+names(info.df) <- c("순위","팀명","경기수","승","무","패","승률","승차","최근","상대팀","스코어")
 head(info.df) 
 
 # 2009, 2012년 주별 합계를 구하시오.

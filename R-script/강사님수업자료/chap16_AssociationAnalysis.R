@@ -41,7 +41,7 @@ library(arules) #read.transactions()함수 제공
 
 
 # 1. transaction 객체 생성(파일 이용)
-setwd("c:/Rwork/Part-IV")
+setwd("c:/github/Rwork/Part-IV")
 tran<- read.transactions("tran.txt", format="basket", sep=",")
 tran
 

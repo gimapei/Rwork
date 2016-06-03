@@ -412,7 +412,7 @@ ggsave("C:/Rwork/output/university2.png",dpi=1000) # 9.21 x 7.68 in image
 #<공간시각화 실습>
 
 # 2015년도 06월 기준 대한민국 인구수
-pop <- read.csv("C:/Rwork/Part-III/population201506.csv",header=T)
+pop <- read.csv("C:/github/Rwork/Part-III/population201506.csv",header=T)
 pop
 
 region <- pop$지역명   
